@@ -9,17 +9,28 @@ function App() {
     </tr>
   ));
 
+  async function fetchData() {
+    // Try...catch for error handling
+    try {
+      const response = await fetch('https://au-case-webapi.azurewebsites.net/api/products');
+      if (!response.ok) {
+        throw new Error('Failed to fetch');
+      }
+      const data = await response.json();
+      // update Products using fetched data
+      setProducts(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
   return (
     <>
       <div className="page__content__block">
         <h1>Produktoversigt</h1>
         <form action="" className="form" onSubmit={(e) => {
           e.preventDefault();
-          setProducts([
-            { name: 'Produkt 1', price: 100 },
-            { name: 'Produkt 2', price: 200 },
-            { name: 'Produkt 3', price: 300 },
-          ]);
+          fetchData();
         }}>
           <button type="submit" className="button">Hent alle produkter</button>
         </form>

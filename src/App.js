@@ -4,6 +4,7 @@ function App() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [pressed, setPressed] = useState(false);
   
   const renderProducts = products.map((product, index) => (
     <tr key={index}>
@@ -14,6 +15,7 @@ function App() {
 
   async function fetchData() {
     setLoading(true);
+    setPressed(true);
     setError(null); // Reset error
     try {
       const response = await fetch('https://au-case-webapi.azurewebsites.net/api/products');
@@ -28,6 +30,7 @@ function App() {
       console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
+      setPressed(false);
     }
   }
 
@@ -39,7 +42,11 @@ function App() {
           e.preventDefault();
           fetchData();
         }}>
-          <button type="submit" className="button" disabled={loading}>
+          <button 
+            type="submit" 
+            className={`button ${pressed ? 'pressed' : ''}`}
+            disabled={loading}
+          > 
             {loading ? 'Henter...' : 'Hent alle produkter'}
           </button>
         </form>
